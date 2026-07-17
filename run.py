@@ -6,21 +6,13 @@ Version: 1.0
 """
 
 from app import create_app, db
-from app.models import User, Product, Category, Preorder, Announcement
-import os
 
 app = create_app()
 
-@app.shell_context_processor
-def make_shell_context():
-    return {
-        'db': db,
-        'User': User,
-        'Product': Product,
-        'Category': Category,
-        'Preorder': Preorder,
-        'Announcement': Announcement
-    }
+# Автоматически создаём таблицы при запуске
+with app.app_context():
+    db.create_all()
+    print("✅ Таблицы проверены/созданы")
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run()
