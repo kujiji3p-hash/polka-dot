@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+{% block meta_desc %}{{ product.short_desc or product.description[:150] }}{% endblock %}
+
+{% block content %}
+<section class="pd-section pd-section--top">
+    <div class="pd-breadcrumbs">
+        <a href="{{ url_for('main.index') }}">Главная</a>
+        <span>/</span>
+        <a href="{{ url_for('main.products') }}">Каталог</a>
+        <span>/</span>
+        <span>{{ product.name }}</span>
+    </div>
+
+    <div class="pd-product-detail">
+        <div class="pd-product-detail-image">
+            {% if product.image_main %}
+            <img src="{{ product.image_main }}" alt="{{ product.name }}">
+            {% else %}
+            <div class="pd-product-placeholder pd-product-placeholder--large">
+                <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="30" y="15" width="60" height="90" rx="6"/>
+                    <line x1="30" y1="35" x2="90" y2="35"/>
+                    <line x1="30" y1="55" x2="90" y2="55"/>
+                    <line x1="30" y1="75" x2="90" y2="75"/>
+                    <line x1="50" y1="15" x2="50" y2="105"/>
+                    <line x1="70" y1="15" x2="70" y2="105"/>
+                </svg>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="pd-product-detail-info">
+            <div class="pd-product-detail-category">{{ product.category.name if product.category else 'Продукт' }}</div>
+            <h1 class="pd-product-detail-name">{{ product.name }}</h1>
+
+            {% if product.status == 'preorder' %}
+            <div class="pd-product-detail-badge pd-badge--preorder">Предзаказ</div>
+            {% elif product.status == 'new' %}
+            <div class="pd-product-detail-badge pd-badge--new">Новинка</div>
+            {% endif %}
+
+            <div class="pd-product-detail-price">
+                {% if product.old_price %}
+                <span class="pd-product-old-price">{{ product.old_price }} ₽</span>
+                {% endif %}
+                <span class="pd-product-price pd-product-price--large">{{ product.price }} ₽</span>
+                {% if product.old_price %}
+                <span class="pd-product-discount">-{{ product.discount_percent }}%</span>
+                {% endif %}
+            </div>
+
+            <p class="pd-product-detail-desc">{{ product.description or product.short_desc or '' }}</p>
+
+            <!-- Characteristics -->
+            {% if product.composition or product.volume or product.color or product.material %}
+            <div class="pd-product-specs">
+                <h3>Характеристики</h3>
+                <table class="pd-specs-table">
+                    {% if product.composition %}
+                    <tr><td>Состав</td><td>{{ product.composition }}</td></tr>
+                    {% endif %}
+                    {% if product.volume %}
+                    <tr><td>Объем</td><td>{{ product.volume }}</td></tr>
+                    {% endif %}
+                    {% if product.color %}
+                    <tr><td>Цвет</td><td>{{ product.color }}</td></tr>
+                    {% endif %}
+                    {% if product.action %}
+                    <tr><td>Действие</td><td>{{ product.action }}</td></tr>
+                    {% endif %}
+                    {% if product.shelf_life %}
+                    <tr><td>Срок годности</td><td>{{ product.shelf_life }}</td></tr>
+                    {% endif %}
+                    {% if product.country %}
+                    <tr><td>Страна</td><td>{{ product.country }}</td></tr>
+                    {% endif %}
+                    {% if product.material %}
+                    <tr><td>Материал</td><td>{{ product.material }}</td></tr>
+                    {% endif %}
+                    {% if product.package_contents %}
+                    <tr><td>Комплектация</td><td>{{ product.package_contents }}</td></tr>
+                    {% endif %}
+                    {% if product.weight %}
+                    <tr><td>Вес</td><td>{{ product.weight }}</td></tr>
+                    {% endif %}
+                    {% if product.sku %}
+                    <tr><td>Артикул</td><td>{{ product.sku }}</td></tr>
+                    {% endif %}
+                </table>
+            </div>
+            {% endif %}
+
+            <div class="pd-product-detail-actions">
+                {% if product.status == 'preorder' %}
+                <a href="{{ url_for('main.preorder') }}" class="pd-btn pd-btn--primary pd-btn--large">Оформить предзаказ</a>
+                {% elif product.status == 'active' %}
+                <button class="pd-btn pd-btn--primary pd-btn--large" onclick="alert('Функция заказа в разработке')">Заказать</button>
+                {% else %}
+                <button class="pd-btn pd-btn--outline pd-btn--large" disabled>Скоро в продаже</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if related %}
+    <div class="pd-related">
+        <h2 class="pd-section-title">Похожие продукты</h2>
+        <div class="pd-products-grid pd-products-grid--small">
+            {% for p in related %}
+            <article class="pd-product-card">
+                <a href="{{ url_for('main.product_detail', slug=p.slug) }}" class="pd-product-link">
+                    <div class="pd-product-image">
+                        <div class="pd-product-placeholder">
+                            <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="20" y="10" width="40" height="60" rx="4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="pd-product-info">
+                        <h3 class="pd-product-name">{{ p.name }}</h3>
+                        <span class="pd-product-price">{{ p.price }} ₽</span>
+                    </div>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

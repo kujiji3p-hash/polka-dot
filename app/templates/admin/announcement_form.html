@@ -1,0 +1,57 @@
+{% extends "admin/base.html" %}
+
+{% block admin_title %}Новый анонс{% endblock %}
+
+{% block admin_content %}
+<h2>Новый анонс</h2>
+
+<div class="admin-section" style="max-width:700px;">
+    <form method="POST" class="pd-form">
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+            <div class="pd-form-group">
+                <label>Заголовок *</label>
+                <input type="text" name="title" required>
+            </div>
+            <div class="pd-form-group">
+                <label>Slug (URL) *</label>
+                <input type="text" name="slug" required>
+            </div>
+        </div>
+
+        <div class="pd-form-group">
+            <label>Краткое описание</label>
+            <input type="text" name="short_desc" maxlength="512">
+        </div>
+
+        <div class="pd-form-group">
+            <label>Полный текст</label>
+            <textarea name="content" rows="6"></textarea>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="pd-form-group">
+                <label>Дата события</label>
+                <input type="date" name="event_date">
+            </div>
+            <div class="pd-form-group">
+                <label>Статус</label>
+                <select name="status">
+                    <option value="draft">Черновик</option>
+                    <option value="published">Опубликован</option>
+                    <option value="archived">Архив</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="pd-form-group" style="display:flex; align-items:center; gap:8px; margin-top:16px;">
+            <input type="checkbox" name="is_featured" id="is_featured" style="width:auto;">
+            <label for="is_featured" style="margin:0;">Показывать на главной</label>
+        </div>
+
+        <div style="margin-top:32px; display:flex; gap:12px;">
+            <button type="submit" class="btn">Сохранить</button>
+            <a href="{{ url_for('admin.admin_announcements') }}" class="btn" style="background:#666;">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

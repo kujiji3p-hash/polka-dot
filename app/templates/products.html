@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block content %}
+<section class="pd-section pd-section--top">
+    <div class="pd-section-header">
+        <h1 class="pd-section-title">Каталог</h1>
+        <p class="pd-section-subtitle">Все продукты Polka Dot</p>
+    </div>
+
+    <div class="pd-tabs">
+        <a href="{{ url_for('main.products') }}" class="pd-tab {% if not current_category %}active{% endif %}">Все</a>
+        {% for cat in categories %}
+        <a href="{{ url_for('main.products', category=cat.slug) }}" class="pd-tab {% if current_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="pd-products-grid">
+        {% for product in products.items %}
+        <article class="pd-product-card">
+            <a href="{{ url_for('main.product_detail', slug=product.slug) }}" class="pd-product-link">
+                <div class="pd-product-image">
+                    {% if product.image_main %}
+                    <img src="{{ product.image_main }}" alt="{{ product.name }}">
+                    {% else %}
+                    <div class="pd-product-placeholder">
+                        <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                            {% if product.category and product.category.slug == 'gels' %}
+                            <rect x="25" y="15" width="30" height="50" rx="15"/>
+                            <line x1="25" y1="30" x2="55" y2="30"/>
+                            {% else %}
+                            <rect x="20" y="10" width="40" height="60" rx="4"/>
+                            <line x1="20" y1="25" x2="60" y2="25"/>
+                            <line x1="35" y1="10" x2="35" y2="70"/>
+                            {% endif %}
+                        </svg>
+                    </div>
+                    {% endif %}
+                    {% if product.status == 'new' %}
+                    <span class="pd-badge pd-badge--new">NEW</span>
+                    {% elif product.status == 'preorder' %}
+                    <span class="pd-badge pd-badge--preorder">PRE-ORDER</span>
+                    {% elif product.status == 'coming_soon' %}
+                    <span class="pd-badge pd-badge--soon">SOON</span>
+                    {% endif %}
+                </div>
+                <div class="pd-product-info">
+                    <div class="pd-product-category">{{ product.category.name if product.category else 'Продукт' }}</div>
+                    <h3 class="pd-product-name">{{ product.name }}</h3>
+                    <p class="pd-product-desc">{{ product.short_desc or '' }}</p>
+                    <div class="pd-product-footer">
+                        <div>
+                            {% if product.old_price %}
+                            <span class="pd-product-old-price">{{ product.old_price }} ₽</span>
+                            {% endif %}
+                            <span class="pd-product-price">{{ product.price }} ₽</span>
+                        </div>
+                        <span class="pd-product-btn">+</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+        {% else %}
+        <div class="pd-empty">
+            <p>Продукты скоро появятся</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if products.has_prev or products.has_next %}
+    <div class="pd-pagination">
+        {% if products.has_prev %}
+        <a href="{{ url_for('main.products', page=products.prev_num, category=current_category) }}" class="pd-btn pd-btn--outline">← Назад</a>
+        {% endif %}
+        <span class="pd-page-info">Страница {{ products.page }} из {{ products.pages }}</span>
+        {% if products.has_next %}
+        <a href="{{ url_for('main.products', page=products.next_num, category=current_category) }}" class="pd-btn pd-btn--outline">Вперед →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

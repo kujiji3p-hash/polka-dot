@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+
+{% block admin_title %}Анонсы{% endblock %}
+
+{% block admin_content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <h2>Анонсы</h2>
+    <a href="{{ url_for('admin.new_announcement') }}" class="btn">+ Новый анонс</a>
+</div>
+
+<div class="admin-section">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Заголовок</th>
+                <th>Дата события</th>
+                <th>Статус</th>
+                <th>На главной</th>
+                <th>Создан</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in announcements %}
+            <tr>
+                <td>{{ a.id }}</td>
+                <td><strong>{{ a.title }}</strong></td>
+                <td>{{ a.event_date.strftime('%d.%m.%Y') if a.event_date else '—' }}</td>
+                <td><span class="admin-status admin-status--{{ a.status }}">{{ a.status }}</span></td>
+                <td>{{ 'Да' if a.is_featured else 'Нет' }}</td>
+                <td>{{ a.created_at.strftime('%d.%m.%Y') }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">Анонсов пока нет</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

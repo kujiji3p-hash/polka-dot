@@ -1,0 +1,45 @@
+{% extends "admin/base.html" %}
+
+{% block admin_content %}
+<div class="admin-stats">
+    <div class="admin-stat-card">
+        <div class="admin-stat-value">{{ stats.products }}</div>
+        <div class="admin-stat-label">Продуктов</div>
+    </div>
+    <div class="admin-stat-card">
+        <div class="admin-stat-value">{{ stats.preorders }}</div>
+        <div class="admin-stat-label">Предзаказов</div>
+    </div>
+    <div class="admin-stat-card">
+        <div class="admin-stat-value">{{ stats.announcements }}</div>
+        <div class="admin-stat-label">Анонсов</div>
+    </div>
+    <div class="admin-stat-card admin-stat-card--accent">
+        <div class="admin-stat-value">{{ stats.pending_preorders }}</div>
+        <div class="admin-stat-label">Ожидают</div>
+    </div>
+</div>
+
+<div class="admin-section">
+    <h2>Последние предзаказы</h2>
+    <table class="admin-table">
+        <thead>
+            <tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Продукт</th><th>Статус</th><th>Дата</th></tr>
+        </thead>
+        <tbody>
+            {% for p in preorders %}
+            <tr>
+                <td>#{{ p.id }}</td>
+                <td>{{ p.customer_name }}</td>
+                <td>{{ p.customer_phone }}</td>
+                <td>{{ p.product.name if p.product else '—' }}</td>
+                <td><span class="admin-status admin-status--{{ p.status }}">{{ p.status }}</span></td>
+                <td>{{ p.created_at.strftime('%d.%m.%Y') }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center; padding: 40px;">Предзаказов пока нет</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

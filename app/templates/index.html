@@ -1,0 +1,229 @@
+{% extends "layout.html" %}
+
+{% block title %}Polka Dot{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="pd-hero">
+    <div class="pd-hero-content">
+        <h1 class="pd-hero-title">Polka Dot<span class="pd-hero-dot"></span></h1>
+        <p class="pd-hero-subtitle">Профессиональные бьюти-продукты для мастеров ногтевого сервиса. Многоразовые формы и премиальные гели.</p>
+        <div class="pd-hero-buttons">
+            <a href="{{ url_for('main.products') }}" class="pd-btn pd-btn--primary">Смотреть продукты</a>
+            <a href="{{ url_for('main.preorder') }}" class="pd-btn pd-btn--outline">Предзаказ</a>
+        </div>
+    </div>
+    <div class="pd-hero-visual">
+        <div class="pd-hero-dots">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Announcement -->
+<section class="pd-section">
+    <div class="pd-announcement-banner">
+        <div class="pd-announcement-content">
+            <h2>Новая коллекция Salon Square</h2>
+            <p>Верхние многоразовые формы из PMMA для профессионального использования. 14 размеров, идеальная посадка.</p>
+            <a href="{{ url_for('main.products') }}" class="pd-btn pd-btn--light">Подробнее</a>
+        </div>
+        <div class="pd-announcement-pattern"></div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="pd-section">
+    <div class="pd-section-header">
+        <h2 class="pd-section-title">Популярное</h2>
+        <p class="pd-section-subtitle">Топовые продукты этого месяца</p>
+    </div>
+
+    <div class="pd-products-grid">
+        {% for product in featured %}
+        <article class="pd-product-card">
+            <a href="{{ url_for('main.product_detail', slug=product.slug) }}" class="pd-product-link">
+                <div class="pd-product-image">
+                    {% if product.image_main %}
+                    <img src="{{ product.image_main }}" alt="{{ product.name }}">
+                    {% else %}
+                    <div class="pd-product-placeholder">
+                        <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="20" y="10" width="40" height="60" rx="4"/>
+                            <line x1="20" y1="25" x2="60" y2="25"/>
+                            <line x1="20" y1="40" x2="60" y2="40"/>
+                            <line x1="35" y1="10" x2="35" y2="70"/>
+                        </svg>
+                    </div>
+                    {% endif %}
+                    {% if product.status == 'new' %}
+                    <span class="pd-badge pd-badge--new">NEW</span>
+                    {% elif product.status == 'preorder' %}
+                    <span class="pd-badge pd-badge--preorder">PRE-ORDER</span>
+                    {% endif %}
+                </div>
+                <div class="pd-product-info">
+                    <div class="pd-product-category">{{ product.category.name if product.category else 'Продукт' }}</div>
+                    <h3 class="pd-product-name">{{ product.name }}</h3>
+                    <p class="pd-product-desc">{{ product.short_desc or product.description[:80] + '...' if product.description else '' }}</p>
+                    <div class="pd-product-footer">
+                        <span class="pd-product-price">{{ product.price }} ₽</span>
+                        <span class="pd-product-btn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" y1="2" x2="8" y2="14"/>
+                                <line x1="2" y1="8" x2="14" y2="8"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </article>
+        {% else %}
+        <!-- Demo products if DB is empty -->
+        <article class="pd-product-card">
+            <a href="#" class="pd-product-link">
+                <div class="pd-product-image">
+                    <div class="pd-product-placeholder">
+                        <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="20" y="10" width="40" height="60" rx="4"/>
+                            <line x1="20" y1="25" x2="60" y2="25"/>
+                            <line x1="20" y1="40" x2="60" y2="40"/>
+                            <line x1="35" y1="10" x2="35" y2="70"/>
+                        </svg>
+                    </div>
+                    <span class="pd-badge pd-badge--new">NEW</span>
+                </div>
+                <div class="pd-product-info">
+                    <div class="pd-product-category">Формы</div>
+                    <h3 class="pd-product-name">Salon Square</h3>
+                    <p class="pd-product-desc">Верхние многоразовые формы. PMMA. 140 шт.</p>
+                    <div class="pd-product-footer">
+                        <span class="pd-product-price">1 290 ₽</span>
+                        <span class="pd-product-btn">+</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+        <article class="pd-product-card">
+            <a href="#" class="pd-product-link">
+                <div class="pd-product-image">
+                    <div class="pd-product-placeholder">
+                        <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="25" y="15" width="30" height="50" rx="15"/>
+                            <line x1="25" y1="30" x2="55" y2="30"/>
+                            <line x1="25" y1="45" x2="55" y2="45"/>
+                        </svg>
+                    </div>
+                    <span class="pd-badge pd-badge--new">NEW</span>
+                </div>
+                <div class="pd-product-info">
+                    <div class="pd-product-category">Гели</div>
+                    <h3 class="pd-product-name">Гель для наращивания</h3>
+                    <p class="pd-product-desc">Розовый, моделирование. 15 мл.</p>
+                    <div class="pd-product-footer">
+                        <span class="pd-product-price">890 ₽</span>
+                        <span class="pd-product-btn">+</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+        <article class="pd-product-card">
+            <a href="#" class="pd-product-link">
+                <div class="pd-product-image">
+                    <div class="pd-product-placeholder">
+                        <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="20" y="10" width="40" height="60" rx="4" fill="none"/>
+                            <rect x="22" y="12" width="36" height="56" rx="3" fill="none" stroke-dasharray="4 2"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="pd-product-info">
+                    <div class="pd-product-category">Формы</div>
+                    <h3 class="pd-product-name">Прозрачные формы</h3>
+                    <p class="pd-product-desc">Прозрачные верхние формы. 140 шт.</p>
+                    <div class="pd-product-footer">
+                        <span class="pd-product-price">1 190 ₽</span>
+                        <span class="pd-product-btn">+</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Categories Preview -->
+<section class="pd-section pd-section--gray">
+    <div class="pd-section-header">
+        <h2 class="pd-section-title">Категории</h2>
+        <p class="pd-section-subtitle">Выберите подходящие продукты</p>
+    </div>
+    <div class="pd-categories-grid">
+        <a href="{{ url_for('main.products', category='forms') }}" class="pd-category-card">
+            <div class="pd-category-icon">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="12" y="8" width="40" height="48" rx="4"/>
+                    <line x1="12" y1="20" x2="52" y2="20"/>
+                    <line x1="12" y1="32" x2="52" y2="32"/>
+                    <line x1="12" y1="44" x2="52" y2="44"/>
+                </svg>
+            </div>
+            <h3>Формы</h3>
+            <p>Многоразовые верхние формы для наращивания</p>
+        </a>
+        <a href="{{ url_for('main.products', category='gels') }}" class="pd-category-card">
+            <div class="pd-category-icon">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="20" y="12" width="24" height="40" rx="12"/>
+                    <line x1="20" y1="28" x2="44" y2="28"/>
+                    <line x1="20" y1="40" x2="44" y2="40"/>
+                </svg>
+            </div>
+            <h3>Гели</h3>
+            <p>Профессиональные гели для моделирования</p>
+        </a>
+    </div>
+</section>
+
+<!-- Announcements Preview -->
+<section class="pd-section">
+    <div class="pd-section-header">
+        <h2 class="pd-section-title">Ближайшие анонсы</h2>
+        <p class="pd-section-subtitle">Что готовится к запуску</p>
+    </div>
+    <div class="pd-timeline">
+        {% for ann in announcements %}
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-date">{{ ann.event_date.strftime('%B %Y') if ann.event_date else 'Скоро' }}</div>
+            <h3 class="pd-timeline-title">{{ ann.title }}</h3>
+            <p class="pd-timeline-desc">{{ ann.short_desc or ann.content[:120] + '...' if ann.content else '' }}</p>
+        </div>
+        {% else %}
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-date">Июль 2026</div>
+            <h3 class="pd-timeline-title">Запуск линейки Salon Square</h3>
+            <p class="pd-timeline-desc">Верхние многоразовые формы из PMMA уже в продаже. 14 размеров, профессиональное качество.</p>
+        </div>
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-date">Август 2026</div>
+            <h3 class="pd-timeline-title">Новая линейка гелей</h3>
+            <p class="pd-timeline-desc">Расширение ассортимента гелей: базовые, моделирующие, цветные.</p>
+        </div>
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-date">Сентябрь 2026</div>
+            <h3 class="pd-timeline-title">Salon Square Pro</h3>
+            <p class="pd-timeline-desc">Улучшенные формы с усиленным креплением. Предзаказ открыт.</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pd-section-cta">
+        <a href="{{ url_for('main.announcements') }}" class="pd-btn pd-btn--outline">Все анонсы</a>
+    </div>
+</section>
+{% endblock %}

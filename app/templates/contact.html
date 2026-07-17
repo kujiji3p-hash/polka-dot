@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+<section class="pd-section pd-section--top">
+    <div class="pd-section-header">
+        <h1 class="pd-section-title">Контакты</h1>
+        <p class="pd-section-subtitle">Свяжитесь с нами</p>
+    </div>
+
+    <div class="pd-contact-grid">
+        <div class="pd-contact-info">
+            <div class="pd-contact-item">
+                <h3>Email</h3>
+                <p>info@polkadot.ru</p>
+            </div>
+            <div class="pd-contact-item">
+                <h3>Телефон</h3>
+                <p>+7 (999) 123-45-67</p>
+            </div>
+            <div class="pd-contact-item">
+                <h3>Соцсети</h3>
+                <p>Instagram: @polkadot_beauty</p>
+                <p>Telegram: @polkadot_support</p>
+            </div>
+        </div>
+        <div class="pd-contact-form-wrapper">
+            <form class="pd-form">
+                <div class="pd-form-group">
+                    <label>Ваше имя</label>
+                    <input type="text" placeholder="Имя">
+                </div>
+                <div class="pd-form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="email@example.com">
+                </div>
+                <div class="pd-form-group">
+                    <label>Сообщение</label>
+                    <textarea rows="5" placeholder="Ваше сообщение..."></textarea>
+                </div>
+                <button type="button" class="pd-btn pd-btn--primary pd-btn--full" onclick="alert('Форма в разработке')">Отправить</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

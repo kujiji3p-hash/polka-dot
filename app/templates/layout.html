@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Polka Dot{% endblock %} — Профессиональные бьюти-продукты</title>
+    <meta name="description" content="{% block meta_desc %}Polka Dot — профессиональные бьюти-продукты для мастеров ногтевого сервиса. Многоразовые формы и премиальные гели.{% endblock %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/polka_dot_style.css') }}">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%230a0a0a'/></svg>">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Polka Dot Background Pattern -->
+    <div class="pd-pattern"></div>
+
+    <!-- Header -->
+    <header class="pd-header">
+        <div class="pd-header-inner">
+            <a href="{{ url_for('main.index') }}" class="pd-logo">
+                <svg class="pd-logo-icon" viewBox="0 0 42 42" fill="none">
+                    <path d="M8 30C8 18.954 16.954 10 28 10V30C28 36.627 22.627 42 16 42C9.373 42 4 36.627 4 30H8Z" fill="currentColor"/>
+                    <circle cx="20" cy="22" r="6" fill="white"/>
+                    <path d="M26 30C26 18.954 34.954 10 46 10V30C46 36.627 40.627 42 34 42C27.373 42 22 36.627 22 30H26Z" fill="currentColor" transform="translate(-4,0)"/>
+                    <circle cx="38" cy="22" r="6" fill="white" transform="translate(-4,0)"/>
+                    <circle cx="34" cy="6" r="4" fill="currentColor"/>
+                    <circle cx="14" cy="38" r="4" fill="currentColor"/>
+                </svg>
+                <span class="pd-logo-text">pd<span class="pd-logo-dot"></span></span>
+            </a>
+
+            <nav class="pd-nav">
+                <a href="{{ url_for('main.index') }}" class="pd-nav-link {% if request.endpoint == 'main.index' %}active{% endif %}">Главная</a>
+                <a href="{{ url_for('main.products') }}" class="pd-nav-link {% if request.endpoint == 'main.products' %}active{% endif %}">Продукты</a>
+                <a href="{{ url_for('main.preorder') }}" class="pd-nav-link {% if request.endpoint == 'main.preorder' %}active{% endif %}">Предзаказ</a>
+                <a href="{{ url_for('main.announcements') }}" class="pd-nav-link {% if request.endpoint == 'main.announcements' %}active{% endif %}">Анонсы</a>
+                <a href="{{ url_for('main.about') }}" class="pd-nav-link {% if request.endpoint == 'main.about' %}active{% endif %}">О бренде</a>
+            </nav>
+
+            <button class="pd-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="pd-mobile-menu" id="mobileMenu">
+        <a href="{{ url_for('main.index') }}">Главная</a>
+        <a href="{{ url_for('main.products') }}">Продукты</a>
+        <a href="{{ url_for('main.preorder') }}">Предзаказ</a>
+        <a href="{{ url_for('main.announcements') }}">Анонсы</a>
+        <a href="{{ url_for('main.about') }}">О бренде</a>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="pd-flash-container">
+            {% for category, message in messages %}
+            <div class="pd-flash pd-flash--{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="pd-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="pd-footer">
+        <div class="pd-footer-grid">
+            <div class="pd-footer-brand">
+                <div class="pd-footer-logo">Polka Dot<span class="pd-logo-dot"></span></div>
+                <p class="pd-footer-desc">Профессиональные бьюти-продукты для мастеров ногтевого сервиса. Многоразовые формы и премиальные гели.</p>
+            </div>
+            <div class="pd-footer-col">
+                <h4>Продукты</h4>
+                <a href="{{ url_for('main.products', category='forms') }}">Формы</a>
+                <a href="{{ url_for('main.products', category='gels') }}">Гели</a>
+                <a href="{{ url_for('main.preorder') }}">Предзаказ</a>
+            </div>
+            <div class="pd-footer-col">
+                <h4>Компания</h4>
+                <a href="{{ url_for('main.about') }}">О бренде</a>
+                <a href="{{ url_for('main.announcements') }}">Анонсы</a>
+                <a href="{{ url_for('main.contact') }}">Контакты</a>
+            </div>
+            <div class="pd-footer-col">
+                <h4>Соцсети</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Telegram</a>
+                <a href="#">VK</a>
+            </div>
+        </div>
+        <div class="pd-footer-bottom">
+            <span>© 2026 Polka Dot. Все права защищены.</span>
+            <span class="pd-version">polka_dot_ver_1.0</span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/polka_dot_app.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

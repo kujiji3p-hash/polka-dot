@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+
+{% block title %}Предзаказ{% endblock %}
+
+{% block content %}
+<section class="pd-section pd-section--top">
+    <div class="pd-section-header">
+        <h1 class="pd-section-title">Предзаказ</h1>
+        <p class="pd-section-subtitle">Закажите новинки первыми со скидкой 15%</p>
+    </div>
+
+    <div class="pd-products-grid">
+        {% for product in products %}
+        <article class="pd-product-card pd-product-card--preorder">
+            <div class="pd-product-image">
+                {% if product.image_main %}
+                <img src="{{ product.image_main }}" alt="{{ product.name }}">
+                {% else %}
+                <div class="pd-product-placeholder">
+                    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="18" y="8" width="44" height="64" rx="4"/>
+                        <line x1="18" y1="24" x2="62" y2="24"/>
+                        <line x1="18" y1="40" x2="62" y2="40"/>
+                        <line x1="18" y1="56" x2="62" y2="56"/>
+                        <circle cx="40" cy="40" r="12" fill="none" stroke-dasharray="3 3"/>
+                    </svg>
+                </div>
+                {% endif %}
+                <span class="pd-badge pd-badge--preorder">PRE-ORDER</span>
+            </div>
+            <div class="pd-product-info">
+                <div class="pd-product-category">{{ product.category.name if product.category else 'Продукт' }}</div>
+                <h3 class="pd-product-name">{{ product.name }}</h3>
+                <p class="pd-product-desc">{{ product.short_desc or '' }}</p>
+                <div class="pd-product-footer">
+                    <div>
+                        {% if product.old_price %}
+                        <span class="pd-product-old-price">{{ product.old_price }} ₽</span>
+                        {% endif %}
+                        <span class="pd-product-price pd-product-price--accent">{{ product.price }} ₽</span>
+                    </div>
+                </div>
+                <button class="pd-btn pd-btn--primary pd-btn--full" onclick="openPreorderModal('{{ product.id }}', '{{ product.name }}', '{{ product.price }}')">Оформить предзаказ</button>
+            </div>
+        </article>
+        {% else %}
+        <!-- Demo preorders -->
+        <article class="pd-product-card pd-product-card--preorder">
+            <div class="pd-product-image">
+                <div class="pd-product-placeholder">
+                    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="18" y="8" width="44" height="64" rx="4"/>
+                        <line x1="18" y1="24" x2="62" y2="24"/>
+                        <line x1="18" y1="40" x2="62" y2="40"/>
+                        <circle cx="40" cy="40" r="12" fill="none" stroke-dasharray="3 3"/>
+                    </svg>
+                </div>
+                <span class="pd-badge pd-badge--preorder">PRE-ORDER</span>
+            </div>
+            <div class="pd-product-info">
+                <div class="pd-product-category">Формы</div>
+                <h3 class="pd-product-name">Salon Square Pro</h3>
+                <p class="pd-product-desc">Улучшенные формы с усиленным креплением.</p>
+                <div class="pd-product-footer">
+                    <div>
+                        <span class="pd-product-old-price">1 490 ₽</span>
+                        <span class="pd-product-price pd-product-price--accent">1 266 ₽</span>
+                    </div>
+                </div>
+                <button class="pd-btn pd-btn--primary pd-btn--full" onclick="openPreorderModal('0', 'Salon Square Pro', '1266')">Оформить предзаказ</button>
+            </div>
+        </article>
+        <article class="pd-product-card pd-product-card--preorder">
+            <div class="pd-product-image">
+                <div class="pd-product-placeholder">
+                    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="15" y="20" width="16" height="40" rx="8"/>
+                        <rect x="32" y="15" width="16" height="45" rx="8"/>
+                        <rect x="49" y="20" width="16" height="40" rx="8"/>
+                    </svg>
+                </div>
+                <span class="pd-badge pd-badge--preorder">PRE-ORDER</span>
+            </div>
+            <div class="pd-product-info">
+                <div class="pd-product-category">Гели</div>
+                <h3 class="pd-product-name">Premium Gel Set</h3>
+                <p class="pd-product-desc">Набор из 3 гелей. База, моделирование, топ.</p>
+                <div class="pd-product-footer">
+                    <div>
+                        <span class="pd-product-old-price">2 490 ₽</span>
+                        <span class="pd-product-price pd-product-price--accent">2 117 ₽</span>
+                    </div>
+                </div>
+                <button class="pd-btn pd-btn--primary pd-btn--full" onclick="openPreorderModal('0', 'Premium Gel Set', '2117')">Оформить предзаказ</button>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Preorder Modal -->
+<div class="pd-modal" id="preorderModal">
+    <div class="pd-modal-overlay" onclick="closePreorderModal()"></div>
+    <div class="pd-modal-content">
+        <button class="pd-modal-close" onclick="closePreorderModal()">×</button>
+        <h3>Предзаказ</h3>
+        <p id="preorderProductName" class="pd-modal-product"></p>
+        <p id="preorderProductPrice" class="pd-modal-price"></p>
+        <form action="{{ url_for('main.preorder_submit') }}" method="POST" class="pd-form">
+            <input type="hidden" name="product_id" id="preorderProductId">
+            <div class="pd-form-group">
+                <label>Ваше имя</label>
+                <input type="text" name="name" required placeholder="Имя">
+            </div>
+            <div class="pd-form-group">
+                <label>Телефон</label>
+                <input type="tel" name="phone" required placeholder="+7 (___) ___-__-__">
+            </div>
+            <div class="pd-form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="email@example.com">
+            </div>
+            <div class="pd-form-group">
+                <label>Комментарий</label>
+                <textarea name="comment" rows="3" placeholder="Ваши пожелания..."></textarea>
+            </div>
+            <button type="submit" class="pd-btn pd-btn--primary pd-btn--full">Оформить предзаказ</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openPreorderModal(productId, name, price) {
+    document.getElementById('preorderProductId').value = productId;
+    document.getElementById('preorderProductName').textContent = name;
+    document.getElementById('preorderProductPrice').textContent = price + ' ₽';
+    document.getElementById('preorderModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePreorderModal() {
+    document.getElementById('preorderModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+</script>
+{% endblock %}

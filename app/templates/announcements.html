@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}Анонсы{% endblock %}
+
+{% block content %}
+<section class="pd-section pd-section--top">
+    <div class="pd-section-header">
+        <h1 class="pd-section-title">Анонсы</h1>
+        <p class="pd-section-subtitle">Что готовится к запуску</p>
+    </div>
+
+    <div class="pd-timeline pd-timeline--page">
+        {% for ann in announcements.items %}
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-content">
+                <div class="pd-timeline-date">{{ ann.event_date.strftime('%B %Y') if ann.event_date else 'Скоро' }}</div>
+                <h3 class="pd-timeline-title">{{ ann.title }}</h3>
+                <p class="pd-timeline-desc">{{ ann.short_desc or ann.content or '' }}</p>
+                {% if ann.image %}
+                <img src="{{ ann.image }}" alt="{{ ann.title }}" class="pd-timeline-image">
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-content">
+                <div class="pd-timeline-date">Июль 2026</div>
+                <h3 class="pd-timeline-title">Запуск линейки Salon Square</h3>
+                <p class="pd-timeline-desc">Верхние многоразовые формы из PMMA уже в продаже. 14 размеров, профессиональное качество.</p>
+            </div>
+        </div>
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-content">
+                <div class="pd-timeline-date">Август 2026</div>
+                <h3 class="pd-timeline-title">Новая линейка гелей</h3>
+                <p class="pd-timeline-desc">Расширение ассортимента гелей: базовые, моделирующие, цветные. Формула с улучшенной адгезией.</p>
+            </div>
+        </div>
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-content">
+                <div class="pd-timeline-date">Сентябрь 2026</div>
+                <h3 class="pd-timeline-title">Salon Square Pro</h3>
+                <p class="pd-timeline-desc">Улучшенные формы с усиленным креплением и маркировкой размеров. Предзаказ открыт.</p>
+            </div>
+        </div>
+        <div class="pd-timeline-item">
+            <div class="pd-timeline-dot"></div>
+            <div class="pd-timeline-content">
+                <div class="pd-timeline-date">Октябрь 2026</div>
+                <h3 class="pd-timeline-title">Обучающие материалы</h3>
+                <p class="pd-timeline-desc">Видео-уроки и мастер-классы по работе с формами и гелями Polka Dot.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if announcements.has_prev or announcements.has_next %}
+    <div class="pd-pagination">
+        {% if announcements.has_prev %}
+        <a href="{{ url_for('main.announcements', page=announcements.prev_num) }}" class="pd-btn pd-btn--outline">← Назад</a>
+        {% endif %}
+        <span class="pd-page-info">Страница {{ announcements.page }} из {{ announcements.pages }}</span>
+        {% if announcements.has_next %}
+        <a href="{{ url_for('main.announcements', page=announcements.next_num) }}" class="pd-btn pd-btn--outline">Вперед →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

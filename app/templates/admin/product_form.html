@@ -1,0 +1,126 @@
+{% extends "admin/base.html" %}
+
+{% block admin_title %}Новый продукт{% endblock %}
+
+{% block admin_content %}
+<h2>Новый продукт</h2>
+
+<div class="admin-section" style="max-width:800px;">
+    <form method="POST" class="pd-form">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="pd-form-group">
+                <label>Название *</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="pd-form-group">
+                <label>Slug (URL) *</label>
+                <input type="text" name="slug" required placeholder="salon-square">
+            </div>
+        </div>
+
+        <div class="pd-form-group">
+            <label>Краткое описание</label>
+            <input type="text" name="short_desc" maxlength="256">
+        </div>
+
+        <div class="pd-form-group">
+            <label>Полное описание</label>
+            <textarea name="description" rows="4"></textarea>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:20px;">
+            <div class="pd-form-group">
+                <label>Цена *</label>
+                <input type="number" name="price" step="0.01" required>
+            </div>
+            <div class="pd-form-group">
+                <label>Старая цена</label>
+                <input type="number" name="old_price" step="0.01">
+            </div>
+            <div class="pd-form-group">
+                <label>Артикул (SKU)</label>
+                <input type="text" name="sku">
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="pd-form-group">
+                <label>Категория</label>
+                <select name="category_id">
+                    <option value="">— Выберите —</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="pd-form-group">
+                <label>Статус</label>
+                <select name="status">
+                    <option value="active">В продаже</option>
+                    <option value="preorder">Предзаказ</option>
+                    <option value="coming_soon">Скоро</option>
+                    <option value="archived">Архив</option>
+                </select>
+            </div>
+        </div>
+
+        <h3 style="margin:32px 0 16px; font-size:18px;">Характеристики</h3>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="pd-form-group">
+                <label>Состав</label>
+                <textarea name="composition" rows="2"></textarea>
+            </div>
+            <div class="pd-form-group">
+                <label>Объем</label>
+                <input type="text" name="volume" placeholder="15 мл">
+            </div>
+            <div class="pd-form-group">
+                <label>Цвет</label>
+                <input type="text" name="color" placeholder="розовый">
+            </div>
+            <div class="pd-form-group">
+                <label>Действие</label>
+                <input type="text" name="action" placeholder="моделирование; укрепление">
+            </div>
+            <div class="pd-form-group">
+                <label>Срок годности</label>
+                <input type="text" name="shelf_life" placeholder="3 года; 12 мес. после вскрытия">
+            </div>
+            <div class="pd-form-group">
+                <label>Страна производства</label>
+                <input type="text" name="country" placeholder="Россия">
+            </div>
+            <div class="pd-form-group">
+                <label>Материал</label>
+                <input type="text" name="material" placeholder="пластик / PMMA">
+            </div>
+            <div class="pd-form-group">
+                <label>Вес</label>
+                <input type="text" name="weight" placeholder="15 г">
+            </div>
+        </div>
+
+        <div class="pd-form-group">
+            <label>Комплектация</label>
+            <input type="text" name="package_contents" placeholder="140 шт (14 размеров по 10 шт)">
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
+            <div class="pd-form-group">
+                <label>Количество на складе</label>
+                <input type="number" name="stock_quantity" value="0">
+            </div>
+            <div class="pd-form-group" style="display:flex; align-items:center; gap:8px; padding-top:24px;">
+                <input type="checkbox" name="is_featured" id="is_featured" style="width:auto;">
+                <label for="is_featured" style="margin:0;">Показывать на главной</label>
+            </div>
+        </div>
+
+        <div style="margin-top:32px; display:flex; gap:12px;">
+            <button type="submit" class="btn">Сохранить</button>
+            <a href="{{ url_for('admin.admin_products') }}" class="btn" style="background:#666;">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
